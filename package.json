@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "name": "example",
+  "version": "0.0.1",
+  "description": "example for using gulp",
+  "devDependencies": {
+    "gulp": "~3.5.2",
+    "gulp-concat": "~2.1.7",
+    "gulp-sass": "~0.7.0",
+    "gulp-stylus": "0.0.12"
+  }
+}
