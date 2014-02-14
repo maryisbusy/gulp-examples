@@ -21,7 +21,7 @@ gulp.task('stylus-styles', function() {
     gulp.src(paths.stylus)
         .pipe(stylus({
             use: ['nib'],
-            set: ['compress', 'linenos']
+            set: ['linenos']
         }))
         .pipe(concat('styles-stylus.css'))
         .pipe(gulp.dest('css'));
@@ -33,6 +33,24 @@ gulp.task('scripts', function() {
         .pipe(gulp.dest('js'));
 });
 
+gulp.task('production', function() {
+    gulp.src(paths.sass)
+        .pipe(sass())
+        .pipe(concat('styles-sass.css'))
+        .pipe(gulp.dest('css'));
+
+    gulp.src(paths.stylus)
+        .pipe(stylus({
+            use: ['nib'],
+            set: ['compress']
+        }))
+        .pipe(concat('styles-stylus.css'))
+        .pipe(gulp.dest('css'));
+
+    gulp.src(paths.scripts)
+        .pipe(concat('main.js'))
+        .pipe(gulp.dest('js'));
+});
 
 // Rerun the task when a file changes
 gulp.task('watch', function () {
