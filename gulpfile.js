@@ -1,8 +1,11 @@
 var gulp = require('gulp');
 
-var concat = require('gulp-concat');
 var sass = require('gulp-sass');  
 var stylus = require('gulp-stylus');  
+
+var concat = require('gulp-concat');
+var stripDebug = require('gulp-strip-debug');  
+var uglify = require('gulp-uglify');  
 
 var paths = {
   sass: 'scss/**/*.scss',
@@ -49,6 +52,8 @@ gulp.task('production', function() {
 
     gulp.src(paths.scripts)
         .pipe(concat('main.js'))
+        .pipe(stripDebug())
+        .pipe(uglify())
         .pipe(gulp.dest('js'));
 });
 

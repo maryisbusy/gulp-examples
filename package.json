@@ -7,6 +7,8 @@
     "gulp": "~3.5.2",
     "gulp-concat": "~2.1.7",
     "gulp-sass": "~0.7.0",
-    "gulp-stylus": "0.0.12"
+    "gulp-stylus": "0.0.12",
+    "gulp-uglify": "~0.2.1",
+    "gulp-strip-debug": "~0.1.1"
   }
 }
