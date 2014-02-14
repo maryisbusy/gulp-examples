@@ -2,12 +2,13 @@ var gulp = require('gulp');
 
 var sass = require('gulp-sass');  
 var stylus = require('gulp-stylus');  
+var imageMin = require('gulp-imagemin');  
 
 var concat = require('gulp-concat');
 var minifyCSS = require('gulp-minify-css');
 var stripDebug = require('gulp-strip-debug');  
 var uglify = require('gulp-uglify');  
-var imageMin = require('gulp-imagemin');  
+var clean = require('gulp-clean');  
 
 var paths = {
   sass: 'scss/**/*.scss',
@@ -49,7 +50,13 @@ gulp.task('images', function() {
         .pipe(gulp.dest('images'));
 });
 
-gulp.task('production', function() {
+gulp.task('clean', function() {
+    gulp.src(['css','js','images'], {read: false})
+        .pipe(clean());
+});
+
+gulp.task('production', ['clean'], function() {
+
     gulp.src(paths.sass)
         .pipe(sass())
         .pipe(concat('styles-sass.css'))
@@ -78,6 +85,7 @@ gulp.task('production', function() {
             interlaced: true
         }))
         .pipe(gulp.dest('images'));
+
 });
 
 // Rerun the task when a file changes
