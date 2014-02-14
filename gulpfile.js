@@ -7,11 +7,13 @@ var concat = require('gulp-concat');
 var minifyCSS = require('gulp-minify-css');
 var stripDebug = require('gulp-strip-debug');  
 var uglify = require('gulp-uglify');  
+var imageMin = require('gulp-imagemin');  
 
 var paths = {
   sass: 'scss/**/*.scss',
   stylus: 'stylus/**/*.styl',
-  scripts: 'scripts/**/*.js'
+  scripts: 'scripts/**/*.js',
+  images: 'imgs/**/*'
 };
 
 gulp.task('sass-styles', function() {
@@ -37,6 +39,16 @@ gulp.task('scripts', function() {
         .pipe(gulp.dest('js'));
 });
 
+gulp.task('images', function() {
+    gulp.src(paths.images)
+        .pipe(imageMin({
+            optimizationLevel: 3,
+            progressive: true,
+            interlaced: true
+        }))
+        .pipe(gulp.dest('images'));
+});
+
 gulp.task('production', function() {
     gulp.src(paths.sass)
         .pipe(sass())
@@ -58,6 +70,14 @@ gulp.task('production', function() {
         .pipe(stripDebug())
         .pipe(uglify())
         .pipe(gulp.dest('js'));
+
+    gulp.src(paths.images)
+        .pipe(imageMin({
+            optimizationLevel: 3,
+            progressive: true,
+            interlaced: true
+        }))
+        .pipe(gulp.dest('images'));
 });
 
 // Rerun the task when a file changes
@@ -65,10 +85,11 @@ gulp.task('watch', function () {
     gulp.watch(paths.sass, ['sass-styles']);
     gulp.watch(paths.stylus, ['stylus-styles']);
     gulp.watch(paths.scripts, ['scripts']);
+    gulp.watch(paths.images, ['images']);
 });
 
 // The default task (called when you run `gulp` from cli)
-gulp.task('default', ['sass-styles', 'stylus-styles', 'scripts', 'watch']);
+gulp.task('default', ['sass-styles', 'stylus-styles', 'scripts', 'images', 'watch']);
 
 
 
