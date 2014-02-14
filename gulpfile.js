@@ -4,6 +4,7 @@ var sass = require('gulp-sass');
 var stylus = require('gulp-stylus');  
 
 var concat = require('gulp-concat');
+var minifyCSS = require('gulp-minify-css');
 var stripDebug = require('gulp-strip-debug');  
 var uglify = require('gulp-uglify');  
 
@@ -40,6 +41,7 @@ gulp.task('production', function() {
     gulp.src(paths.sass)
         .pipe(sass())
         .pipe(concat('styles-sass.css'))
+        .pipe(minifyCSS())
         .pipe(gulp.dest('css'));
 
     gulp.src(paths.stylus)
@@ -48,6 +50,7 @@ gulp.task('production', function() {
             set: ['compress']
         }))
         .pipe(concat('styles-stylus.css'))
+        .pipe(minifyCSS())
         .pipe(gulp.dest('css'));
 
     gulp.src(paths.scripts)
