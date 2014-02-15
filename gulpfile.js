@@ -11,17 +11,23 @@ var uglify = require('gulp-uglify');
 var clean = require('gulp-clean');  
 
 var paths = {
-  sass: 'scss/**/*.scss',
-  stylus: 'stylus/**/*.styl',
-  scripts: 'scripts/**/*.js',
-  images: 'imgs/**/*'
+  sass    : 'src/scss/**/*.scss',
+  stylus  : 'src/stylus/**/*.styl',
+  scripts : 'src/scripts/**/*.js',
+  images  : 'src/imgs/**/*'
+};
+
+var prodPaths = {
+  css    : 'build/css',
+  js     : 'build/js',
+  images : 'build/images'
 };
 
 gulp.task('sass-styles', function() {
     gulp.src(paths.sass)
         .pipe(sass())
         .pipe(concat('styles-sass.css'))
-        .pipe(gulp.dest('css'));
+        .pipe(gulp.dest(prodPaths.css));
 });
 
 gulp.task('stylus-styles', function() {
@@ -31,13 +37,13 @@ gulp.task('stylus-styles', function() {
             set: ['linenos']
         }))
         .pipe(concat('styles-stylus.css'))
-        .pipe(gulp.dest('css'));
+        .pipe(gulp.dest(prodPaths.css));
 });
 
 gulp.task('scripts', function() {
     gulp.src(paths.scripts)
         .pipe(concat('main.js'))
-        .pipe(gulp.dest('js'));
+        .pipe(gulp.dest(prodPaths.js));
 });
 
 gulp.task('images', function() {
@@ -47,21 +53,21 @@ gulp.task('images', function() {
             progressive: true,
             interlaced: true
         }))
-        .pipe(gulp.dest('images'));
+        .pipe(gulp.dest(prodPaths.images));
 });
 
 gulp.task('clean', function() {
-    gulp.src(['css','js','images'], {read: false})
+    gulp.src([prodPaths.css, prodPaths.js, prodPaths.images], {read: false})
         .pipe(clean());
 });
 
-gulp.task('production', ['clean'], function() {
+gulp.task('production', function() {
 
     gulp.src(paths.sass)
         .pipe(sass())
         .pipe(concat('styles-sass.css'))
         .pipe(minifyCSS())
-        .pipe(gulp.dest('css'));
+        .pipe(gulp.dest(prodPaths.css));
 
     gulp.src(paths.stylus)
         .pipe(stylus({
@@ -70,22 +76,15 @@ gulp.task('production', ['clean'], function() {
         }))
         .pipe(concat('styles-stylus.css'))
         .pipe(minifyCSS())
-        .pipe(gulp.dest('css'));
+        .pipe(gulp.dest(prodPaths.css));
 
     gulp.src(paths.scripts)
         .pipe(concat('main.js'))
         .pipe(stripDebug())
         .pipe(uglify())
-        .pipe(gulp.dest('js'));
+        .pipe(gulp.dest(prodPaths.js));
 
-    gulp.src(paths.images)
-        .pipe(imageMin({
-            optimizationLevel: 3,
-            progressive: true,
-            interlaced: true
-        }))
-        .pipe(gulp.dest('images'));
-
+    gulp.start('images');
 });
 
 // Rerun the task when a file changes
